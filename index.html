@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DataBIT Manager - Dashboard</title>
-  <meta name="description" content="DataBIT Manager é uma interface web moderna para gerenciar aplicações na Discloud com tema escuro, uploads, commits e administração avançada.">
-  <meta name="keywords" content="DataBIT Manager, Discloud, gerenciar aplicações, hospedagem de apps, dashboard, React, Tailwind CSS">
+  <title>DataBIT Manager - Cosmic Dashboard</title>
+  <meta name="description" content="DataBIT Manager é uma dashboard futurista para gerenciar aplicações na Discloud, com design inspirado em IA, uploads, commits e administração avançada.">
+  <meta name="keywords" content="DataBIT Manager, Discloud, gerenciar aplicações, hospedagem de apps, dashboard, React, Tailwind CSS, IA, Grok">
   <meta name="author" content="LucasDesignerF">
   <meta name="robots" content="index, follow">
-  <meta name="theme-color" content="#1E1F22">
+  <meta name="theme-color" content="#0A0B14">
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://manager-databit.pages.dev/">
@@ -17,8 +17,8 @@
   <link rel="icon" type="image/png" href="https://favicon.io/favicon.ico">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="DataBIT Manager - Dashboard">
-  <meta property="og:description" content="Gerencie suas aplicações na Discloud com uma dashboard moderna e responsiva. Faça uploads, commits, e administração avançada.">
+  <meta property="og:title" content="DataBIT Manager - Cosmic Dashboard">
+  <meta property="og:description" content="Gerencie suas aplicações na Discloud com uma dashboard futurista inspirada em IA. Faça uploads, commits e administração avançada.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://manager-databit.pages.dev/">
   <meta property="og:image" content="https://manager-databit.pages.dev/og-image.png">
@@ -27,8 +27,8 @@
 
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="DataBIT Manager - Dashboard">
-  <meta name="twitter:description" content="Dashboard web para gerenciar aplicações na Discloud com tema moderno.">
+  <meta name="twitter:title" content="DataBIT Manager - Cosmic Dashboard">
+  <meta name="twitter:description" content="Dashboard futurista para gerenciar aplicações na Discloud com tema inspirado em IA.">
   <meta name="twitter:image" content="https://manager-databit.pages.dev/og-image.png">
   <meta name="twitter:site" content="@LucasDesignerF">
 
@@ -43,53 +43,81 @@
   <!-- Estilos -->
   <style>
     body {
-      background-color: #1E1F22;
-      color: #FFFFFF;
+      background: linear-gradient(135deg, #0A0B14 0%, #1A1B2A 100%);
+      color: #E0E7FF;
       font-family: 'Inter', sans-serif;
       margin: 0;
       overflow-x: hidden;
+      position: relative;
+    }
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      pointer-events: none;
+      z-index: -1;
+      animation: twinkle 10s infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 0.3; }
     }
     ::-webkit-scrollbar {
-      width: 6px;
+      width: 5px;
     }
     ::-webkit-scrollbar-track {
-      background: #2A2D31;
+      background: #1A1B2A;
     }
     ::-webkit-scrollbar-thumb {
-      background: #5865F2;
-      border-radius: 3px;
+      background: linear-gradient(#6B7280, #3B82F6);
+      border-radius: 5px;
     }
     .sidebar {
-      transition: transform 0.3s ease;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      background: rgba(10, 11, 20, 0.8);
     }
     .sidebar-hidden {
       transform: translateX(-100%);
     }
     .card {
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: rgba(26, 27, 42, 0.95);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(5px);
     }
     .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(88, 101, 242, 0.15);
+      transform: scale(1.03);
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
     }
     .notification {
-      animation: slideIn 0.3s ease;
+      animation: slideInRight 0.5s ease forwards;
+      backdrop-filter: blur(5px);
+      background: rgba(26, 27, 42, 0.9);
     }
     .spinner {
-      border: 3px solid #2A2D31;
-      border-top: 3px solid #5865F2;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      border-top: 3px solid #3B82F6;
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      animation: spin 0.8s linear infinite;
+      width: 24px;
+      height: 24px;
+      animation: spin 0.7s linear infinite;
     }
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    @keyframes slideIn {
+    @keyframes slideInRight {
       from { transform: translateX(100%); opacity: 0; }
       to { transform: translateX(0); opacity: 1; }
+    }
+    .glow {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+    .hover-glow:hover {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
     }
     @media (max-width: 768px) {
       .sidebar {
@@ -97,15 +125,20 @@
         top: 0;
         left: 0;
         height: 100%;
-        z-index: 20;
+        z-index: 30;
       }
       .content {
         margin-left: 0;
+      }
+      .navbar-mobile {
+        backdrop-filter: blur(10px);
+        background: rgba(10, 11, 20, 0.8);
       }
     }
   </style>
 </head>
 <body>
+  <div className="stars" style={{ backgroundImage: "url('https://i.imgur.com/YOUR_IMAGE_URL_HERE.jpg')" }}></div>
   <div id="root"></div>
   <script type="text/babel">
     const API_BASE_URL = "https://api.discloud.app/v2";
@@ -113,25 +146,25 @@
     // Componente de Notificação
     function Notification({ type, message, onClose }) {
       React.useEffect(() => {
-        const timer = setTimeout(onClose, 5000);
+        const timer = setTimeout(onClose, 4000);
         return () => clearTimeout(timer);
       }, [onClose]);
 
       const colors = {
-        success: "border-green-500 bg-green-500/10",
-        error: "border-red-500 bg-red-500/10",
-        info: "border-blue-500 bg-blue-500/10",
+        success: "border-green-400 bg-green-400/20",
+        error: "border-red-400 bg-red-400/20",
+        info: "border-blue-400 bg-blue-400/20",
       };
 
       return (
-        <div className={`fixed top-4 right-4 w-80 border-l-4 p-4 rounded-lg shadow-lg notification ${colors[type]}`}>
+        <div className={`fixed top-6 right-6 w-96 border-l-4 p-4 rounded-xl shadow-2xl notification ${colors[type]} z-50`}>
           <div className="flex justify-between items-center">
             <h3 className="font-semibold text-sm">{type === "success" ? "Sucesso" : type === "error" ? "Erro" : "Informação"}</h3>
-            <button onClick={onClose} className="text-gray-400 hover:text-white">
+            <button onClick={onClose} className="text-gray-300 hover:text-white">
               <i className="bx bx-x text-lg"></i>
             </button>
           </div>
-          <p className="text-sm">{message}</p>
+          <p className="text-sm mt-1">{message}</p>
         </div>
       );
     }
@@ -139,43 +172,36 @@
     // Componente de Sidebar
     function Sidebar({ apiKey, setApiKey, setView, sidebarOpen, setSidebarOpen }) {
       return (
-        <div className={`sidebar fixed w-64 bg-[#2A2D31] h-full p-4 flex flex-col space-y-4 ${sidebarOpen ? '' : 'sidebar-hidden'} md:sidebar-hidden md:transform-none md:w-20 md:items-center md:space-y-6 z-20 transition-all duration-300`}>
+        <div className={`sidebar fixed w-72 h-full p-6 flex flex-col space-y-6 ${sidebarOpen ? '' : 'sidebar-hidden'} md:transform-none md:w-24 md:items-center md:p-4 z-30`}>
           <div className="flex items-center justify-between">
-            <h1 className="text-lg font-bold md:hidden">DataBIT Manager</h1>
+            <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 md:hidden">DataBIT</h1>
             <button className="md:hidden text-white" onClick={() => setSidebarOpen(false)}>
               <i className="bx bx-x text-2xl"></i>
             </button>
-            <i className="bx bx-server text-2xl hidden md:block"></i>
+            <i className="bx bx-planet text-3xl text-blue-400 hidden md:block"></i>
           </div>
           <input
             type="text"
-            placeholder="API Key"
+            placeholder="Chave API"
             value={apiKey}
             onChange={(e) => setApiKey(e.target.value)}
-            className="bg-[#1E1F22] border border-[#5865F2] text-white p-2 rounded text-sm w-full"
+            className="bg-[#0A0B14] border border-blue-500/50 text-white p-3 rounded-lg text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 glow"
           />
-          <div className="flex flex-col space-y-2">
-            <button
-              onClick={() => { setView("user"); setSidebarOpen(false); }}
-              className="flex items-center space-x-2 text-white hover:bg-[#5865F2] p-2 rounded"
-            >
-              <i className="bx bx-user text-lg"></i>
-              <span className="md:hidden">Usuário</span>
-            </button>
-            <button
-              onClick={() => { setView("upload"); setSidebarOpen(false); }}
-              className="flex items-center space-x-2 text-white hover:bg-[#5865F2] p-2 rounded"
-            >
-              <i className="bx bx-upload text-lg"></i>
-              <span className="md:hidden">Upload</span>
-            </button>
-            <button
-              onClick={() => { setView("apps"); setSidebarOpen(false); }}
-              className="flex items-center space-x-2 text-white hover:bg-[#5865F2] p-2 rounded"
-            >
-              <i className="bx bx-grid-alt text-lg"></i>
-              <span className="md:hidden">Aplicações</span>
-            </button>
+          <div className="flex flex-col space-y-3">
+            {[
+              { icon: 'bx-user', label: 'Usuário', view: 'user' },
+              { icon: 'bx-upload', label: 'Upload', view: 'upload' },
+              { icon: 'bx-grid-alt', label: 'Aplicações', view: 'apps' },
+            ].map((item) => (
+              <button
+                key={item.view}
+                onClick={() => { setView(item.view); setSidebarOpen(false); }}
+                className="flex items-center space-x-3 text-white hover:bg-blue-500/50 p-3 rounded-lg hover-glow transition-all duration-300"
+              >
+                <i className={`bx ${item.icon} text-xl`}></i>
+                <span className="md:hidden">{item.label}</span>
+              </button>
+            ))}
           </div>
         </div>
       );
@@ -183,18 +209,18 @@
 
     // Componente de Card de Usuário
     function UserCard({ user }) {
-      if (!user) return <p className="text-center text-gray-400 animate__animated animate__fadeIn">Insira uma API Key válida para ver as informações do usuário.</p>;
+      if (!user) return <p className="text-center text-gray-400 animate__animated animate__fadeInUp">Insira uma Chave API válida para ver as informações do usuário.</p>;
       return (
-        <div className="card bg-[#2A2D31] p-6 rounded-xl border border-[#36393F] shadow-lg">
-          <h2 className="text-lg font-semibold mb-4 flex items-center text-[#5865F2]">
+        <div className="card p-6 rounded-2xl border border-blue-500/20 shadow-2xl animate__animated animate__fadeInUp">
+          <h2 className="text-lg font-semibold mb-4 flex items-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
             <i className="bx bx-user mr-2"></i> Informações do Usuário
           </h2>
-          <div className="space-y-2 text-sm">
-            <p><span className="font-medium">ID:</span> {user.userID}</p>
-            <p><span className="font-medium">Plano:</span> {user.plan}</p>
-            <p><span className="font-medium">RAM:</span> {user.ramUsedMb}/{user.totalRamMb} MB</p>
-            <p><span className="font-medium">Localidade:</span> {user.locale}</p>
-            <p><span className="font-medium">Data de Término do Plano:</span> {user.planDataEnd}</p>
+          <div className="space-y-3 text-sm">
+            <p><span className="font-medium text-blue-400">ID:</span> {user.userID}</p>
+            <p><span className="font-medium text-blue-400">Plano:</span> {user.plan}</p>
+            <p><span className="font-medium text-blue-400">RAM:</span> {user.ramUsedMb}/{user.totalRamMb} MB</p>
+            <p><span className="font-medium text-blue-400">Localidade:</span> {user.locale}</p>
+            <p><span className="font-medium text-blue-400">Data de Término do Plano:</span> {user.planDataEnd}</p>
           </div>
         </div>
       );
@@ -206,7 +232,7 @@
 
       const handleFileUpload = async (event) => {
         if (!apiKey) {
-          addMessage("error", "Por favor, insira uma API Key válida.");
+          addMessage("error", "Por favor, insira uma Chave API válida.");
           return;
         }
         const file = event.target.files[0];
@@ -240,8 +266,8 @@
       };
 
       return (
-        <div className="card bg-[#2A2D31] p-6 rounded-xl border border-[#36393F] shadow-lg">
-          <h2 className="text-lg font-semibold mb-4 flex items-center text-[#5865F2]">
+        <div className="card p-6 rounded-2xl border border-blue-500/20 shadow-2xl animate__animated animate__fadeInUp">
+          <h2 className="text-lg font-semibold mb-4 flex items-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
             <i className="bx bx-upload mr-2"></i> Enviar Nova Aplicação
           </h2>
           <input
@@ -249,7 +275,7 @@
             accept=".zip"
             onChange={handleFileUpload}
             disabled={isUploading}
-            className="bg-[#1E1F22] border border-[#5865F2] text-white p-2 rounded w-full text-sm file:bg-[#5865F2] file:text-white file:border-none file:px-4 file:py-2 file:rounded file:mr-2"
+            className="bg-[#0A0B14] border border-blue-500/50 text-white p-3 rounded-lg w-full text-sm file:bg-gradient-to-r file:from-blue-500 file:to-purple-600 file:text-white file:border-none file:px-4 file:py-2 file:rounded-lg file:mr-3 focus:outline-none focus:ring-2 focus:ring-blue-500 glow"
           />
           {isUploading && <div className="spinner mt-4 mx-auto"></div>}
         </div>
@@ -263,7 +289,7 @@
 
       const handleAction = async (action) => {
         if (!apiKey) {
-          addMessage("error", "Por favor, insira uma API Key válida.");
+          addMessage("error", "Por favor, insira uma Chave API válida.");
           return;
         }
         try {
@@ -288,7 +314,7 @@
 
       const handleRamChange = async () => {
         if (!apiKey) {
-          addMessage("error", "Por favor, insira uma API Key válida.");
+          addMessage("error", "Por favor, insira uma Chave API válida.");
           return;
         }
         if (!ramInput || ramInput < 100) {
@@ -319,7 +345,7 @@
 
       const handleCommit = async (event) => {
         if (!apiKey) {
-          addMessage("error", "Por favor, insira uma API Key válida.");
+          addMessage("error", "Por favor, insira uma Chave API válida.");
           return;
         }
         const file = event.target.files[0];
@@ -354,7 +380,7 @@
 
       const handleDelete = async () => {
         if (!apiKey) {
-          addMessage("error", "Por favor, insira uma API Key válida.");
+          addMessage("error", "Por favor, insira uma Chave API válida.");
           return;
         }
         if (!window.confirm("Tem certeza que deseja excluir esta aplicação?")) return;
@@ -379,45 +405,45 @@
       };
 
       return (
-        <div className="card bg-[#2A2D31] p-6 rounded-xl border border-[#36393F] shadow-lg">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-[#5865F2]">{app.name}</h2>
+        <div className="card p-6 rounded-2xl border border-blue-500/20 shadow-2xl animate__animated animate__fadeInUp">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">{app.name}</h2>
             <button
               onClick={onBack}
-              className="bg-[#5865F2] text-white px-3 py-1 rounded hover:bg-[#4752C4] flex items-center text-sm"
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-purple-700 flex items-center text-sm glow"
             >
-              <i className="bx bx-arrow-back mr-1"></i> Voltar
+              <i className="bx bx-arrow-back mr-2"></i> Voltar
             </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 className="text-base font-semibold mb-2 flex items-center text-[#5865F2]">
+              <h3 className="text-base font-semibold mb-3 flex items-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
                 <i className="bx bx-info-circle mr-2"></i> Informações
               </h3>
               <div className="space-y-2 text-sm">
-                <p><span className="font-medium">ID:</span> {app.id}</p>
-                <p><span className="font-medium">Tipo:</span> {app.type}</p>
-                <p><span className="font-medium">Status:</span> {app.online ? "Online" : "Offline"}</p>
-                <p><span className="font-medium">RAM:</span> {app.ram} MB</p>
-                <p><span className="font-medium">Arquivo Principal:</span> {app.mainFile}</p>
-                <p><span className="font-medium">Linguagem:</span> {app.lang}</p>
-                <p><span className="font-medium">Auto Restart:</span> {app.autoRestart ? "Sim" : "Não"}</p>
+                <p><span className="font-medium text-blue-400">ID:</span> {app.id}</p>
+                <p><span className="font-medium text-blue-400">Tipo:</span> {app.type}</p>
+                <p><span className="font-medium text-blue-400">Status:</span> {app.online ? "Online" : "Offline"}</p>
+                <p><span className="font-medium text-blue-400">RAM:</span> {app.ram} MB</p>
+                <p><span className="font-medium text-blue-400">Arquivo Principal:</span> {app.mainFile}</p>
+                <p><span className="font-medium text-blue-400">Linguagem:</span> {app.lang}</p>
+                <p><span className="font-medium text-blue-400">Auto Restart:</span> {app.autoRestart ? "Sim" : "Não"}</p>
               </div>
             </div>
             {status && (
               <div>
-                <h3 className="text-base font-semibold mb-2 flex items-center text-[#5865F2]">
+                <h3 className="text-base font-semibold mb-3 flex items-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
                   <i className="bx bx-stats mr-2"></i> Status
                 </h3>
                 <div className="space-y-2 text-sm">
-                  <p><span className="font-medium">Container:</span> {status.container}</p>
-                  <p><span className="font-medium">CPU:</span> {status.cpu}</p>
-                  <p><span className="font-medium">Memória:</span> {status.memory}</p>
-                  <p><span className="font-medium">SSD:</span> {status.ssd}</p>
-                  <p><span className="font-medium">Download:</span> {status.netIO.down}</p>
-                  <p><span className="font-medium">Upload:</span> {status.netIO.up}</p>
-                  <p><span className="font-medium">Último Restart:</span> {status.last_restart}</p>
-                  <p><span className="font-medium">Iniciado em:</span> {status.startedAt}</p>
+                  <p><span className="font-medium text-blue-400">Container:</span> {status.container}</p>
+                  <p><span className="font-medium text-blue-400">CPU:</span> {status.cpu}</p>
+                  <p><span className="font-medium text-blue-400">Memória:</span> {status.memory}</p>
+                  <p><span className="font-medium text-blue-400">SSD:</span> {status.ssd}</p>
+                  <p><span className="font-medium text-blue-400">Download:</span> {status.netIO.down}</p>
+                  <p><span className="font-medium text-blue-400">Upload:</span> {status.netIO.up}</p>
+                  <p><span className="font-medium text-blue-400">Último Restart:</span> {status.last_restart}</p>
+                  <p><span className="font-medium text-blue-400">Iniciado em:</span> {status.startedAt}</p>
                 </div>
               </div>
             )}
@@ -425,19 +451,19 @@
           <div className="mt-6 flex flex-wrap gap-3">
             <button
               onClick={() => handleAction("start")}
-              className="bg-[#57F287] text-black px-4 py-2 rounded hover:bg-[#43B581] flex items-center text-sm"
+              className="bg-gradient-to-r from-green-400 to-green-600 text-black px-4 py-2 rounded-lg hover:from-green-500 hover:to-green-700 flex items-center text-sm glow"
             >
               <i className="bx bx-play mr-2"></i> Iniciar
             </button>
             <button
               onClick={() => handleAction("restart")}
-              className="bg-[#5865F2] text-white px-4 py-2 rounded hover:bg-[#4752C4] flex items-center text-sm"
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-purple-700 flex items-center text-sm glow"
             >
               <i className="bx bx-refresh mr-2"></i> Reiniciar
             </button>
             <button
               onClick={() => handleAction("stop")}
-              className="bg-[#F04747] text-white px-4 py-2 rounded hover:bg-[#D83C3C] flex items-center text-sm"
+              className="bg-gradient-to-r from-red-400 to-red-600 text-white px-4 py-2 rounded-lg hover:from-red-500 hover:to-red-700 flex items-center text-sm glow"
             >
               <i className="bx bx-stop mr-2"></i> Parar
             </button>
@@ -447,11 +473,11 @@
                 value={ramInput}
                 onChange={(e) => setRamInput(e.target.value)}
                 placeholder="RAM (MB)"
-                className="bg-[#1E1F22] border border-[#5865F2] text-white p-2 rounded w-20 text-sm"
+                className="bg-[#0A0B14] border border-blue-500/50 text-white p-3 rounded-lg w-20 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 glow"
               />
               <button
                 onClick={handleRamChange}
-                className="bg-[#5865F2] text-white px-4 py-2 rounded hover:bg-[#4752C4] flex items-center text-sm"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-purple-700 flex items-center text-sm glow"
               >
                 <i className="bx bx-memory-card mr-2"></i> Alterar RAM
               </button>
@@ -462,12 +488,12 @@
                 accept=".zip"
                 onChange={handleCommit}
                 disabled={isCommitting}
-                className="bg-[#1E1F22] border border-[#5865F2] text-white p-2 rounded hidden"
+                className="bg-[#0A0B14] border border-blue-500/50 text-white p-3 rounded-lg hidden"
                 id={`commit-${app.id}`}
               />
               <button
                 onClick={() => document.getElementById(`commit-${app.id}`).click()}
-                className="bg-[#57F287] text-black px-4 py-2 rounded hover:bg-[#43B581] flex items-center text-sm"
+                className="bg-gradient-to-r from-green-400 to-green-600 text-black px-4 py-2 rounded-lg hover:from-green-500 hover:to-green-700 flex items-center text-sm glow"
                 disabled={isCommitting}
               >
                 <i className="bx bx-git-commit mr-2"></i> Commit
@@ -476,21 +502,21 @@
             </div>
             <button
               onClick={handleDelete}
-              className="bg-[#F04747] text-white px-4 py-2 rounded hover:bg-[#D83C3C] flex items-center text-sm"
+              className="bg-gradient-to-r from-red-400 to-red-600 text-white px-4 py-2 rounded-lg hover:from-red-500 hover:to-red-700 flex items-center text-sm glow"
             >
               <i className="bx bx-trash mr-2"></i> Excluir
             </button>
           </div>
           {backup && (
             <div className="mt-6">
-              <h3 className="text-base font-semibold mb-2 flex items-center text-[#5865F2]">
+              <h3 className="text-base font-semibold mb-3 flex items-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
                 <i className="bx bx-download mr-2"></i> Backup
               </h3>
               <a
                 href={backup.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#5865F2] underline hover:text-[#4752C4] text-sm"
+                className="text-blue-400 hover:text-blue-300 underline text-sm"
               >
                 Download Backup
               </a>
@@ -498,10 +524,10 @@
           )}
           {logs && (
             <div className="mt-6">
-              <h3 className="text-base font-semibold mb-2 flex items-center text-[#5865F2]">
+              <h3 className="text-base font-semibold mb-3 flex items-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
                 <i className="bx bx-terminal mr-2"></i> Logs
               </h3>
-              <pre className="bg-[#1E1F22] p-4 rounded-lg max-h-80 overflow-y-auto text-xs font-mono">
+              <pre className="bg-[#0A0B14] p-4 rounded-lg max-h-80 overflow-y-auto text-xs font-mono border border-blue-500/20">
                 {logs.terminal.small}
               </pre>
             </div>
@@ -594,7 +620,7 @@
       // Carregar detalhes, status, logs e backup de uma aplicação
       const handleSelectApp = async (appId) => {
         if (!apiKey) {
-          addMessage("error", "Por favor, insira uma API Key válida.");
+          addMessage("error", "Por favor, insira uma Chave API válida.");
           return;
         }
         setIsLoading(true);
@@ -666,17 +692,19 @@
             sidebarOpen={sidebarOpen}
             setSidebarOpen={setSidebarOpen}
           />
-          <div className="content flex-1 p-4 md:ml-20 transition-all duration-300">
-            <button
-              className="md:hidden fixed top-4 left-4 text-white bg-[#5865F2] p-2 rounded z-30"
-              onClick={() => setSidebarOpen(true)}
-            >
-              <i className="bx bx-menu text-xl"></i>
-            </button>
-            <div className="container mx-auto p-4">
-              <h1 className="text-2xl font-bold mb-6 text-[#5865F2] md:ml-4">DataBIT Manager - Dashboard</h1>
+          <div className="content flex-1 p-6 md:ml-24 transition-all duration-300">
+            <div className="navbar-mobile fixed top-0 left-0 right-0 p-4 flex items-center justify-between md:hidden z-20">
+              <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">DataBIT</h1>
+              <button
+                className="text-white bg-blue-500/50 p-2 rounded-lg"
+                onClick={() => setSidebarOpen(true)}
+              >
+                <i className="bx bx-menu text-xl"></i>
+              </button>
+            </div>
+            <div className="container mx-auto pt-16 md:pt-0">
               {isLoading && (
-                <div className="flex justify-center my-4">
+                <div className="flex justify-center my-6">
                   <div className="spinner"></div>
                 </div>
               )}
@@ -696,25 +724,25 @@
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {apps.length > 0 ? (
                     apps.map((app) => (
-                      <div key={app.id} className="card bg-[#2A2D31] p-6 rounded-xl border border-[#36393F] shadow-lg">
-                        <h3 className="text-base font-semibold mb-2 flex items-center text-[#5865F2]">
+                      <div key={app.id} className="card p-6 rounded-2xl border border-blue-500/20 shadow-2xl animate__animated animate__fadeInUp">
+                        <h3 className="text-base font-semibold mb-3 flex items-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
                           <i className="bx bx-grid-alt mr-2"></i> {app.name}
                         </h3>
                         <div className="space-y-2 text-sm">
-                          <p><span className="font-medium">ID:</span> {app.id}</p>
-                          <p><span className="font-medium">Status:</span> {app.online ? "Online" : "Offline"}</p>
-                          <p><span className="font-medium">RAM:</span> {app.ram} MB</p>
+                          <p><span className="font-medium text-blue-400">ID:</span> {app.id}</p>
+                          <p><span className="font-medium text-blue-400">Status:</span> {app.online ? "Online" : "Offline"}</p>
+                          <p><span className="font-medium text-blue-400">RAM:</span> {app.ram} MB</p>
                         </div>
                         <button
                           onClick={() => handleSelectApp(app.id)}
-                          className="mt-4 bg-[#5865F2] text-white px-4 py-2 rounded hover:bg-[#4752C4] flex items-center text-sm w-full justify-center"
+                          className="mt-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-purple-700 flex items-center text-sm w-full justify-center glow"
                         >
                           <i className="bx bx-detail mr-2"></i> Ver Detalhes
                         </button>
                       </div>
                     ))
                   ) : (
-                    <p className="text-center text-gray-400">Nenhuma aplicação encontrada. Insira uma API Key válida.</p>
+                    <p className="text-center text-gray-400 animate__animated animate__fadeInUp">Nenhuma aplicação encontrada. Insira uma Chave API válida.</p>
                   )}
                 </div>
               )}
