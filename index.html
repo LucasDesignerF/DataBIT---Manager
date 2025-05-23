@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataBIT Manager - WEB</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.22.9/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #2F3136;
+      color: #FFFFFF;
+      font-family: 'Inter', sans-serif;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #202225;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #5865F2;
+      border-radius: 4px;
+    }
+    .navbar {
+      transition: all 0.3s ease;
+    }
+    .card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 20px rgba(88, 101, 242, 0.2);
+    }
+    .embed {
+      animation: fadeIn 0.3s ease;
+    }
+    .spinner {
+      border: 4px solid #202225;
+      border-top: 4px solid #5865F2;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @media (max-width: 768px) {
+      .navbar-menu {
+        display: none;
+      }
+      .navbar-menu.active {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const API_BASE_URL = "https://api.discloud.app/v2";
+
+    // Componente de Embed para Mensagens
+    function MessageEmbed({ type, message, onClose }) {
+      React.useEffect(() => {
+        const timer = setTimeout(onClose, 5000);
+        return () => clearTimeout(timer);
+      }, [onClose]);
+
+      const colors = {
+        success: "#57F287",
+        error: "#F04747",
+        info: "#5865F2",
+      };
+
+      return (
+        <div className="fixed top-4 right-4 w-80 bg-[#36393F] border-l-4 p-4 rounded-lg shadow-lg animate__animated animate__fadeIn embed" style={{ borderColor: colors[type] }}>
+          <div className="flex justify-between items-center">
+            <h3 className="font-bold">{type === "success" ? "Sucesso" : type === "error" ? "Erro" : "Informação"}</h3>
+            <button onClick={onClose} className="text-[#FFFFFF] hover:text-[#5865F2]">
+              <i className="bx bx-x"></i>
+            </button>
+          </div>
+          <p>{message}</p>
+        </div>
+      );
+    }
+
+    // Componente de Navbar
+    function Navbar({ apiKey, setApiKey, setView }) {
+      const [menuOpen, setMenuOpen] = React.useState(false);
+
+      return (
+        <nav className="navbar fixed top-0 left-0 w-full bg-[#36393F] border-b border-[#202225] p-4 z-10 animate__animated animate__fadeInDown">
+          <div className="container mx-auto flex justify-between items-center">
+            <h1 className="text-2xl font-bold">DataBIT Manager - WEB</h1>
+            <div className="flex items-center space-x-4">
+              <input
+                type="text"
+                placeholder="API Key"
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                className="bg-[#202225] border border-[#5865F2] text-white p-2 rounded text-sm"
+              />
+              <div className="hidden md:flex space-x-4 navbar-menu">
+                <button
+                  onClick={() => setView("user")}
+                  className="hover:text-[#5865F2] flex items-center"
+                >
+                  <i className="bx bx-user mr-1"></i> Usuário
+                </button>
+                <button
+                  onClick={() => setView("upload")}
+                  className="hover:text-[#5865F2] flex items-center"
+                >
+                  <i className="bx bx-upload mr-1"></i> Upload
+                </button>
+                <button
+                  onClick={() => setView("apps")}
+                  className="hover:text-[#5865F2] flex items-center"
+                >
+                  <i className="bx bx-grid-alt mr-1"></i> Aplicações
+                </button>
+              </div>
+              <button
+                className="md:hidden text-[#5865F2]"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
+                <i className={`bx ${menuOpen ? "bx-x" : "bx-menu"} text-2xl`}></i>
+              </button>
+            </div>
+          </div>
+          {menuOpen && (
+            <div className="md:hidden flex flex-col space-y-2 mt-4 navbar-menu active animate__animated animate__fadeIn">
+              <button
+                onClick={() => { setView("user"); setMenuOpen(false); }}
+                className="hover:text-[#5865F2] flex items-center"
+              >
+                <i className="bx bx-user mr-1"></i> Usuário
+              </button>
+              <button
+                onClick={() => { setView("upload"); setMenuOpen(false); }}
+                className="hover:text-[#5865F2] flex items-center"
+              >
+                <i className="bx bx-upload mr-1"></i> Upload
+              </button>
+              <button
+                onClick={() => { setView("apps"); setMenuOpen(false); }}
+                className="hover:text-[#5865F2] flex items-center"
+              >
+                <i className="bx bx-grid-alt mr-1"></i> Aplicações
+              </button>
+            </div>
+          )}
+        </nav>
+      );
+    }
+
+    // Componente de Card de Usuário
+    function UserCard({ user }) {
+      if (!user) return <p className="text-center animate__animated animate__fadeIn">Insira uma API Key válida para ver as informações do usuário.</p>;
+      return (
+        <div className="card bg-[#36393F] p-6 rounded-lg border border-[#202225] animate__animated animate__fadeIn">
+          <h2 className="text-xl font-bold mb-4 flex items-center">
+            <i className="bx bx-user mr-2"></i> Informações do Usuário
+          </h2>
+          <p>ID: {user.userID}</p>
+          <p>Plano: {user.plan}</p>
+          <p>RAM: {user.ramUsedMb}/{user.totalRamMb} MB</p>
+          <p>Localidade: {user.locale}</p>
+          <p>Data de Término do Plano: {user.planDataEnd}</p>
+        </div>
+      );
+    }
+
+    // Componente de Upload
+    function UploadCard({ apiKey, onUploadSuccess, addMessage }) {
+      const [isUploading, setIsUploading] = React.useState(false);
+
+      const handleFileUpload = async (event) => {
+        if (!apiKey) {
+          addMessage("error", "Por favor, insira uma API Key válida.");
+          return;
+        }
+        const file = event.target.files[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/upload`, {
+            method: "POST",
+            headers: {
+              "api-token": apiKey,
+              "accept": "*/*",
+            },
+            body: formData,
+          });
+          const data = await response.json();
+          if (data.status === "ok") {
+            addMessage("success", `Aplicação enviada com sucesso! ID: ${data.app.id}`);
+            onUploadSuccess();
+          } else {
+            addMessage("error", `Erro ao enviar aplicação: ${data.message}`);
+          }
+        } catch (error) {
+          addMessage("error", `Erro na requisição: ${error.message}`);
+        } finally {
+          setIsUploading(false);
+        }
+      };
+
+      return (
+        <div className="card bg-[#36393F] p-6 rounded-lg border border-[#202225] animate__animated animate__fadeIn">
+          <h2 className="text-xl font-bold mb-4 flex items-center">
+            <i className="bx bx-upload mr-2"></i> Enviar Nova Aplicação
+          </h2>
+          <input
+            type="file"
+            accept=".zip"
+            onChange={handleFileUpload}
+            disabled={isUploading}
+            className="bg-[#202225] border border-[#5865F2] text-white p-2 rounded w-full"
+          />
+          {isUploading && <div className="spinner mt-4 mx-auto"></div>}
+        </div>
+      );
+    }
+
+    // Componente de Detalhes da Aplicação
+    function AppDetailsCard({ app, status, logs, backup, onBack, apiKey, onActionSuccess, addMessage }) {
+      const [ramInput, setRamInput] = React.useState(app.ram || 100);
+      const [isCommitting, setIsCommitting] = React.useState(false);
+
+      const handleAction = async (action) => {
+        if (!apiKey) {
+          addMessage("error", "Por favor, insira uma API Key válida.");
+          return;
+        }
+        try {
+          const response = await fetch(`${API_BASE_URL}/app/${app.id}/${action}`, {
+            method: "PUT",
+            headers: {
+              "api-token": apiKey,
+              "accept": "*/*",
+            },
+          });
+          const data = await response.json();
+          if (data.status === "ok") {
+            addMessage("success", `Aplicação ${action} com sucesso!`);
+            onActionSuccess();
+          } else {
+            addMessage("error", `Erro ao ${action}: ${data.message}`);
+          }
+        } catch (error) {
+          addMessage("error", `Erro ao ${action}: ${error.message}`);
+        }
+      };
+
+      const handleRamChange = async () => {
+        if (!apiKey) {
+          addMessage("error", "Por favor, insira uma API Key válida.");
+          return;
+        }
+        if (!ramInput || ramInput < 100) {
+          addMessage("error", "Por favor, insira um valor de RAM válido (mínimo 100 MB).");
+          return;
+        }
+        try {
+          const response = await fetch(`${API_BASE_URL}/app/${app.id}/ram`, {
+            method: "PUT",
+            headers: {
+              "api-token": apiKey,
+              "accept": "*/*",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ramMB: parseInt(ramInput) }),
+          });
+          const data = await response.json();
+          if (data.status === "ok") {
+            addMessage("success", "RAM alterada com sucesso!");
+            onActionSuccess();
+          } else {
+            addMessage("error", `Erro ao alterar RAM: ${data.message}`);
+          }
+        } catch (error) {
+          addMessage("error", `Erro ao alterar RAM: ${error.message}`);
+        }
+      };
+
+      const handleCommit = async (event) => {
+        if (!apiKey) {
+          addMessage("error", "Por favor, insira uma API Key válida.");
+          return;
+        }
+        const file = event.target.files[0];
+        if (!file) return;
+
+        setIsCommitting(true);
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/app/${app.id}/commit`, {
+            method: "PUT",
+            headers: {
+              "api-token": apiKey,
+              "accept": "*/*",
+            },
+            body: formData,
+          });
+          const data = await response.json();
+          if (data.status === "ok") {
+            addMessage("success", "Commit realizado com sucesso!");
+            onActionSuccess();
+          } else {
+            addMessage("error", `Erro ao realizar commit: ${data.message}`);
+          }
+        } catch (error) {
+          addMessage("error", `Erro ao realizar commit: ${error.message}`);
+        } finally {
+          setIsCommitting(false);
+        }
+      };
+
+      const handleDelete = async () => {
+        if (!apiKey) {
+          addMessage("error", "Por favor, insira uma API Key válida.");
+          return;
+        }
+        if (!window.confirm("Tem certeza que deseja excluir esta aplicação?")) return;
+        try {
+          const response = await fetch(`${API_BASE_URL}/app/${app.id}/delete`, {
+            method: "DELETE",
+            headers: {
+              "api-token": apiKey,
+              "accept": "*/*",
+            },
+          });
+          const data = await response.json();
+          if (data.status === "ok") {
+            addMessage("success", "Aplicação excluída com sucesso!");
+            onBack();
+          } else {
+            addMessage("error", `Erro ao excluir aplicação: ${data.message}`);
+          }
+        } catch (error) {
+          addMessage("error", `Erro ao excluir aplicação: ${error.message}`);
+        }
+      };
+
+      return (
+        <div className="card bg-[#36393F] p-6 rounded-lg border border-[#202225] animate__animated animate__fadeIn">
+          <button
+            onClick={onBack}
+            className="mb-4 bg-[#5865F2] text-white px-4 py-2 rounded hover:bg-[#4752C4] flex items-center"
+          >
+            <i className="bx bx-arrow-back mr-2"></i> Voltar
+          </button>
+          <h2 className="text-2xl font-bold mb-4">{app.name}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h3 className="text-lg font-bold mb-2 flex items-center">
+                <i className="bx bx-info-circle mr-2"></i> Informações
+              </h3>
+              <p>ID: {app.id}</p>
+              <p>Tipo: {app.type}</p>
+              <p>Status: {app.online ? "Online" : "Offline"}</p>
+              <p>RAM: {app.ram} MB</p>
+              <p>Arquivo Principal: {app.mainFile}</p>
+              <p>Linguagem: {app.lang}</p>
+              <p>Auto Restart: {app.autoRestart ? "Sim" : "Não"}</p>
+            </div>
+            {status && (
+              <div>
+                <h3 className="text-lg font-bold mb-2 flex items-center">
+                  <i className="bx bx-stats mr-2"></i> Status
+                </h3>
+                <p>Container: {status.container}</p>
+                <p>CPU: {status.cpu}</p>
+                <p>Memória: {status.memory}</p>
+                <p>SSD: {status.ssd}</p>
+                <p>Download: {status.netIO.down}</p>
+                <p>Upload: {status.netIO.up}</p>
+                <p>Último Restart: {status.last_restart}</p>
+                <p>Iniciado em: {status.startedAt}</p>
+              </div>
+            )}
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <button
+              onClick={() => handleAction("start")}
+              className="bg-[#57F287] text-black px-4 py-2 rounded hover:bg-[#43B581] flex items-center"
+            >
+              <i className="bx bx-play mr-2"></i> Iniciar
+            </button>
+            <button
+              onClick={() => handleAction("restart")}
+              className="bg-[#5865F2] text-white px-4 py-2 rounded hover:bg-[#4752C4] flex items-center"
+            >
+              <i className="bx bx-refresh mr-2"></i> Reiniciar
+            </button>
+            <button
+              onClick={() => handleAction("stop")}
+              className="bg-[#F04747] text-white px-4 py-2 rounded hover:bg-[#D83C3C] flex items-center"
+            >
+              <i className="bx bx-stop mr-2"></i> Parar
+            </button>
+            <div className="flex items-center space-x-2">
+              <input
+                type="number"
+                value={ramInput}
+                onChange={(e) => setRamInput(e.target.value)}
+                placeholder="RAM (MB)"
+                className="bg-[#202225] border border-[#5865F2] text-white p-2 rounded w-24"
+              />
+              <button
+                onClick={handleRamChange}
+                className="bg-[#5865F2] text-white px-4 py-2 rounded hover:bg-[#4752C4] flex items-center"
+              >
+                <i className="bx bx-memory-card mr-2"></i> Alterar RAM
+              </button>
+            </div>
+            <div className="flex items-center">
+              <input
+                type="file"
+                accept=".zip"
+                onChange={handleCommit}
+                disabled={isCommitting}
+                className="bg-[#202225] border border-[#5865F2] text-white p-2 rounded hidden"
+                id={`commit-${app.id}`}
+              />
+              <button
+                onClick={() => document.getElementById(`commit-${app.id}`).click()}
+                className="bg-[#57F287] text-black px-4 py-2 rounded hover:bg-[#43B581] flex items-center"
+                disabled={isCommitting}
+              >
+                <i className="bx bx-git-commit mr-2"></i> Commit
+              </button>
+              {isCommitting && <div className="spinner ml-2"></div>}
+            </div>
+            <button
+              onClick={handleDelete}
+              className="bg-[#F04747] text-white px-4 py-2 rounded hover:bg-[#D83C3C] flex items-center"
+            >
+              <i className="bx bx-trash mr-2"></i> Excluir
+            </button>
+          </div>
+          {backup && (
+            <div className="mt-4">
+              <h3 className="text-lg font-bold mb-2 flex items-center">
+                <i className="bx bx-download mr-2"></i> Backup
+              </h3>
+              <a
+                href={backup.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#5865F2] underline hover:text-[#4752C4]"
+              >
+                Download Backup
+              </a>
+            </div>
+          )}
+          {logs && (
+            <div className="mt-4">
+              <h3 className="text-lg font-bold mb-2 flex items-center">
+                <i className="bx bx-terminal mr-2"></i> Logs
+              </h3>
+              <pre className="bg-[#202225] p-4 rounded max-h-96 overflow-y-auto text-sm">
+                {logs.terminal.small}
+              </pre>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Componente Principal
+    function App() {
+      const [apiKey, setApiKey] = React.useState("");
+      const [user, setUser] = React.useState(null);
+      const [apps, setApps] = React.useState([]);
+      const [selectedApp, setSelectedApp] = React.useState(null);
+      const [appStatus, setAppStatus] = React.useState(null);
+      const [appLogs, setAppLogs] = React.useState(null);
+      const [appBackup, setAppBackup] = React.useState(null);
+      const [view, setView] = React.useState("user");
+      const [isLoading, setIsLoading] = React.useState(false);
+      const [messages, setMessages] = React.useState([]);
+
+      const addMessage = (type, message) => {
+        const id = Date.now();
+        setMessages((prev) => [...prev, { id, type, message }]);
+      };
+
+      const removeMessage = (id) => {
+        setMessages((prev) => prev.filter((msg) => msg.id !== id));
+      };
+
+      // Carregar informações do usuário
+      React.useEffect(() => {
+        if (!apiKey) {
+          setUser(null);
+          setApps([]);
+          return;
+        }
+        setIsLoading(true);
+        fetch(`${API_BASE_URL}/user`, {
+          headers: {
+            "api-token": apiKey,
+            "accept": "*/*",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "ok") {
+              setUser(data.user);
+              addMessage("success", "Informações do usuário carregadas com sucesso!");
+            } else {
+              addMessage("error", `Erro ao carregar usuário: ${data.message}`);
+              setApiKey("");
+            }
+          })
+          .catch((err) => {
+            addMessage("error", `Erro ao carregar usuário: ${err.message}`);
+            setApiKey("");
+          })
+          .finally(() => setIsLoading(false));
+      }, [apiKey]);
+
+      // Carregar lista de aplicações
+      const fetchApps = () => {
+        if (!apiKey) return;
+        setIsLoading(true);
+        fetch(`${API_BASE_URL}/app/all`, {
+          headers: {
+            "api-token": apiKey,
+            "accept": "*/*",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "ok") {
+              setApps(data.apps || []);
+              addMessage("success", "Aplicações carregadas com sucesso!");
+            } else {
+              addMessage("error", `Erro ao carregar aplicações: ${data.message}`);
+            }
+          })
+          .catch((err) => addMessage("error", `Erro ao carregar aplicações: ${err.message}`))
+          .finally(() => setIsLoading(false));
+      };
+
+      React.useEffect(() => {
+        fetchApps();
+      }, [apiKey]);
+
+      // Carregar detalhes, status, logs e backup de uma aplicação
+      const handleSelectApp = async (appId) => {
+        if (!apiKey) {
+          addMessage("error", "Por favor, insira uma API Key válida.");
+          return;
+        }
+        setIsLoading(true);
+        try {
+          // Buscar detalhes
+          const appRes = await fetch(`${API_BASE_URL}/app/${appId}`, {
+            headers: {
+              "api-token": apiKey,
+              "accept": "*/*",
+            },
+          });
+          const appData = await appRes.json();
+          if (appData.status === "ok") setSelectedApp(appData.apps);
+          else throw new Error(appData.message);
+
+          // Buscar status
+          const statusRes = await fetch(`${API_BASE_URL}/app/${appId}/status`, {
+            headers: {
+              "api-token": apiKey,
+              "accept": "*/*",
+            },
+          });
+          const statusData = await statusRes.json();
+          if (statusData.status === "ok") setAppStatus(statusData.apps);
+          else throw new Error(statusData.message);
+
+          // Buscar logs
+          const logsRes = await fetch(`${API_BASE_URL}/app/${appId}/logs`, {
+            headers: {
+              "api-token": apiKey,
+              "accept": "*/*",
+            },
+          });
+          const logsData = await logsRes.json();
+          if (logsData.status === "ok") setAppLogs(logsData.apps);
+          else throw new Error(logsData.message);
+
+          // Buscar backup
+          const backupRes = await fetch(`${API_BASE_URL}/app/${appId}/backup`, {
+            headers: {
+              "api-token": apiKey,
+              "accept": "*/*",
+            },
+          });
+          const backupData = await backupRes.json();
+          if (backupData.status === "ok") setAppBackup(backupData.backups);
+          else throw new Error(backupData.message);
+
+          addMessage("success", "Detalhes da aplicação carregados com sucesso!");
+          setView("appDetails");
+        } catch (error) {
+          addMessage("error", `Erro ao carregar detalhes da aplicação: ${error.message}`);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      const handleBack = () => {
+        setSelectedApp(null);
+        setAppStatus(null);
+        setAppLogs(null);
+        setAppBackup(null);
+        setView("apps");
+      };
+
+      return (
+        <div className="min-h-screen pt-16 transition-all duration-300">
+          <Navbar apiKey={apiKey} setApiKey={setApiKey} setView={setView} />
+          <div className="container mx-auto p-6">
+            {isLoading && (
+              <div className="flex justify-center my-4">
+                <div className="spinner"></div>
+              </div>
+            )}
+            {messages.map((msg) => (
+              <MessageEmbed
+                key={msg.id}
+                type={msg.type}
+                message={msg.message}
+                onClose={() => removeMessage(msg.id)}
+              />
+            ))}
+            {view === "user" && <UserCard user={user} />}
+            {view === "upload" && <UploadCard apiKey={apiKey} onUploadSuccess={fetchApps} addMessage={addMessage} />}
+            {view === "apps" && (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate__animated animate__fadeIn">
+                {apps.length > 0 ? (
+                  apps.map((app) => (
+                    <div key={app.id} className="card bg-[#36393F] p-6 rounded-lg border border-[#202225]">
+                      <h3 className="text-lg font-bold mb-2 flex items-center">
+                        <i className="bx bx-grid-alt mr-2"></i> {app.name}
+                      </h3>
+                      <p>ID: {app.id}</p>
+                      <p>Status: {app.online ? "Online" : "Offline"}</p>
+                      <p>RAM: {app.ram} MB</p>
+                      <button
+                        onClick={() => handleSelectApp(app.id)}
+                        className="mt-4 bg-[#5865F2] text-white px-4 py-2 rounded hover:bg-[#4752C4] flex items-center"
+                      >
+                        <i className="bx bx-detail mr-2"></i> Ver Detalhes
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center animate__animated animate__fadeIn">Nenhuma aplicação encontrada. Insira uma API Key válida.</p>
+                )}
+              </div>
+            )}
+            {view === "appDetails" && selectedApp && (
+              <AppDetailsCard
+                app={selectedApp}
+                status={appStatus}
+                logs={appLogs}
+                backup={appBackup}
+                onBack={handleBack}
+                apiKey={apiKey}
+                onActionSuccess={() => handleSelectApp(selectedApp.id)}
+                addMessage={addMessage}
+              />
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // Renderizar a aplicação
+    ReactDOM.render(<App />, document.getElementById("root"));
+  </script>
+</body>
+</html>
